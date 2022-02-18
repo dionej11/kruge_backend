@@ -1,0 +1,32 @@
+{
+  "name": "kruge_backend",
+  "version": "1.0.0",
+  "description": "app finanzas personales",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dionej11/kruge_backend.git"
+  },
+  "keywords": [
+    "finanzas",
+    "mongodb"
+  ],
+  "author": "Daniela Jurado <daniijuradob@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dionej11/kruge_backend/issues"
+  },
+  "homepage": "https://github.com/dionej11/kruge_backend#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "4.17.2",
+    "mongodb": "4.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
