@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = process.env.URI_MONGODB;
 
 class MongoDB {
@@ -20,13 +20,34 @@ class MongoDB {
     }
     return this.connection;
   }
-  pruebita(nameCat) {
+  
+  /***************************TRANSACTION COLLECTION METHODS***************************/
+  insertTransaction(data) {
     return this.connect().then((db) => {
-      let gatito = {
-        nombre: nameCat,
-        vidas: 4
-      }
-      return db.collection('gatitos').insertOne(gatito);
+      return db.collection('transactions').insertOne(data);
+    });
+  }
+  getAllTransactions() {
+    return this.connect().then((db) => {
+      return db.collection('transactions').find().toArray();
+    });
+  }
+  getTransaction(transactionId) {
+    return this.connect().then((db) => {
+      return db.collection('transactions').findOne({_id: ObjectId(transactionId)});
+    });
+  }
+  updateTransaction(transactionId, editedTransaction) {
+    return this.connect().then((db) => {
+      return db.collection('transactions').updateOne(
+        {_id: ObjectId(transactionId)},
+        {$set: {...editedTransaction}}
+      );
+    });
+  }
+  deleteTransaction(transactionId) {
+    return this.connect().then((db) => {
+      return db.collection('transactions').deleteOne({_id: ObjectId(transactionId)});
     });
   }
 }
