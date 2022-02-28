@@ -50,6 +50,36 @@ class MongoDB {
       return db.collection('transactions').deleteOne({_id: ObjectId(transactionId)});
     });
   }
+
+  /***************************CATEGORY COLLECTION METHODS***************************/
+  insertCategory(data) {
+    return this.connect().then((db) => {
+      return db.collection('category').insertOne(data);
+    });
+  }
+  getAllCategories() {
+    return this.connect().then((db) => {
+      return db.collection('category').find().toArray();
+    });
+  }
+  getCategory(categoryId) {
+    return this.connect().then((db) => {
+      return db.collection('category').findOne({_id: ObjectId(categoryId)});
+    });
+  }
+  updateCategory(categoryId, editedCategory) {
+    return this.connect().then((db) => {
+      return db.collection('category').updateOne(
+        {_id: ObjectId(categoryId)},
+        {$set: {...editedCategory}}
+      );
+    });
+  }
+  deleteCategory(categoryId) {
+    return this.connect().then((db) => {
+      return db.collection('category').deleteOne({_id: ObjectId(categoryId)});
+    });
+  }
 }
 
 module.exports = MongoDB;
