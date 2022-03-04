@@ -22,9 +22,9 @@ class MongoDB {
   }
   
   /***************************TRANSACTION COLLECTION METHODS***************************/
-  insertTransaction(data) {
+  insertTransaction(data, userId) {
     return this.connect().then((db) => {
-      return db.collection('transactions').insertOne(data);
+      return db.collection('transactions').insertOne({...data, idOwner:  ObjectId(userId)});
     });
   }
   getAllTransactions() {
@@ -92,9 +92,9 @@ class MongoDB {
       return db.collection('users').find().toArray();
     });
   }
-  getUser(userId) {
+  getUser(userEmail) {
     return this.connect().then((db) => {
-      return db.collection('users').findOne({_id: ObjectId(userId)});
+      return db.collection('users').findOne({email: userEmail});
     });
   }
   updateUser(userId, editedUser) {

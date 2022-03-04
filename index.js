@@ -2,6 +2,8 @@ const express = require('express');
 const servidor = express();
 require('dotenv').config();
 
+require('./middleware');
+
 servidor.use(express.json());
 
 servidor.use(require('./routes/RouterUsers'));
