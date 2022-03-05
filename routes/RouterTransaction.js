@@ -4,9 +4,13 @@ const RouterTransaction = express.Router();
 const MongoDB = require('../mongodb/client');
 const client = new MongoDB();
 
-RouterTransaction.post('/new_transaction', async (request, response) => {
-  let result = await client.insertTransaction(request.body);
-  response.json({result, message: 'TRANSACTION INSERTED'});
+const passport = require('passport');
+
+RouterTransaction.post('/new_transaction',
+  passport.authenticate("jwt", {session: false}),
+  async (request, response) => {
+    let result = await client.insertTransaction(request.body, request.user.sub);
+    response.json({result, message: 'TRANSACTION INSERTED'});
 });
 
 RouterTransaction.get('/transactions', async (request, response) => {

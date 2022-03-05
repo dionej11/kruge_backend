@@ -4,13 +4,18 @@ const RouterUsers = express.Router();
 const MongoDB = require('../mongodb/client');
 const client = new MongoDB();
 
-// RouterUsers.post('/login', async (request, response) => {
-//   let result = await cliente.pruebita(request.body.nameCat);
-//   response.json({
-//     result,
-//     msj: 'hola funcionó el gatito'
-//   })
-// });
+const JSONWEBTOKEN = require('jsonwebtoken');
+
+RouterUsers.post('/login', async (request, response) => {
+  let user = await client.getUser(request.body.userEmail);
+  if (user) {
+    let token = JSONWEBTOKEN.sign({sub: user._id, nameUser: user.name}, process.env.JWTPASSWORD);
+    response.json({user, token, message: 'USER LOGED'});
+  }
+  else {
+    response.json({message: 'USER NOT FOUND :P'});
+  }
+});
 
 RouterUsers.post('/new_user', async (request, response) => {
   let result = await client.insertUser(request.body);
@@ -22,8 +27,8 @@ RouterUsers.get('/users', async (request, response) => {
   response.json({result, message: 'ALL USERS'});
 });
 
-RouterUsers.get('/users/:userId', async (request, response) => {
-  let result = await client.getUser(request.params.userId);
+RouterUsers.get('/users/:userEmail', async (request, response) => {
+  let result = await client.getUser(request.params.userEmail);
   response.json({result, message: 'THE USER'});
 });
 
