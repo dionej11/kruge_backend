@@ -4,9 +4,12 @@ const RouterCategory = express.Router();
 const MongoDB = require('../mongodb/client');
 const client = new MongoDB();
 
+// Middlewares
 const passport = require('passport');
+const { ValidateBodyCategory } = require('../middleware/types');
 
 RouterCategory.post('/new_category',
+  ValidateBodyCategory,
   passport.authenticate("jwt", { session: false }),
   async (request, response) => {
     let result = await client.insertCategory(request.body, request.user.sub);
@@ -38,6 +41,7 @@ RouterCategory.get('/categories/:categoryId',
   });
 
 RouterCategory.put('/categories/:categoryId',
+  ValidateBodyCategory,
   passport.authenticate("jwt", { session: false }),
   async (request, response) => {
     let result = await client.updateCategory(request.params.categoryId, request.body, request.user.sub);
