@@ -27,27 +27,27 @@ class MongoDB {
       return db.collection('transactions').insertOne({...data, idOwner:  ObjectId(userId)});
     });
   }
-  getAllTransactions() {
+  getAllTransactions(userId) {
     return this.connect().then((db) => {
-      return db.collection('transactions').find().toArray();
+      return db.collection('transactions').find({idOwner: ObjectId(userId)}).toArray();
     });
   }
-  getTransaction(transactionId) {
+  getTransaction(transactionId, userId) {
     return this.connect().then((db) => {
-      return db.collection('transactions').findOne({_id: ObjectId(transactionId)});
+      return db.collection('transactions').findOne({_id: ObjectId(transactionId), idOwner: ObjectId(userId)});
     });
   }
-  updateTransaction(transactionId, editedTransaction) {
+  updateTransaction(transactionId, editedTransaction, userId) {
     return this.connect().then((db) => {
       return db.collection('transactions').updateOne(
-        {_id: ObjectId(transactionId)},
+        {_id: ObjectId(transactionId), idOwner: ObjectId(userId)},
         {$set: {...editedTransaction}}
       );
     });
   }
-  deleteTransaction(transactionId) {
+  deleteTransaction(transactionId, userId) {
     return this.connect().then((db) => {
-      return db.collection('transactions').deleteOne({_id: ObjectId(transactionId)});
+      return db.collection('transactions').deleteOne({_id: ObjectId(transactionId), idOwner: ObjectId(userId)});
     });
   }
 
