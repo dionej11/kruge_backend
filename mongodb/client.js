@@ -52,32 +52,32 @@ class MongoDB {
   }
 
   /***************************CATEGORY COLLECTION METHODS***************************/
-  insertCategory(data) {
+  insertCategory(data, userId) {
     return this.connect().then((db) => {
-      return db.collection('category').insertOne(data);
+      return db.collection('category').insertOne({...data, idOwner:  ObjectId(userId)});
     });
   }
-  getAllCategories() {
+  getAllCategories(userId) {
     return this.connect().then((db) => {
-      return db.collection('category').find().toArray();
+      return db.collection('category').find({idOwner:  ObjectId(userId)}).toArray();
     });
   }
-  getCategory(categoryId) {
+  getCategory(categoryId, userId) {
     return this.connect().then((db) => {
-      return db.collection('category').findOne({_id: ObjectId(categoryId)});
+      return db.collection('category').findOne({_id: ObjectId(categoryId), idOwner:  ObjectId(userId)});
     });
   }
-  updateCategory(categoryId, editedCategory) {
+  updateCategory(categoryId, editedCategory, userId) {
     return this.connect().then((db) => {
       return db.collection('category').updateOne(
-        {_id: ObjectId(categoryId)},
+        {_id: ObjectId(categoryId), idOwner:  ObjectId(userId)},
         {$set: {...editedCategory}}
       );
     });
   }
-  deleteCategory(categoryId) {
+  deleteCategory(categoryId, userId) {
     return this.connect().then((db) => {
-      return db.collection('category').deleteOne({_id: ObjectId(categoryId)});
+      return db.collection('category').deleteOne({_id: ObjectId(categoryId), idOwner:  ObjectId(userId)});
     });
   }
 
