@@ -24,7 +24,7 @@ class MongoDB {
   /***************************TRANSACTION COLLECTION METHODS***************************/
   insertTransaction(data, userId) {
     return this.connect().then((db) => {
-      return db.collection('transactions').insertOne({...data, idOwner:  ObjectId(userId)});
+      return db.collection('transactions').insertOne({...data, category: ObjectId(data.category), idOwner:  ObjectId(userId)});
     });
   }
   getAllTransactions(userId) {
@@ -51,6 +51,13 @@ class MongoDB {
     });
   }
 
+  totalMoney(userId) {
+    return this.connect().then((db) => {
+      return db.collection('transactions').find({idOwner: ObjectId(userId), type: "ingreso"},
+        {projection: {_id: 0, amount: 1}}
+      ).toArray();
+    });
+  }
   /***************************CATEGORY COLLECTION METHODS***************************/
   insertCategory(data, userId) {
     return this.connect().then((db) => {
