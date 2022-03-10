@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId,  } = require('mongodb');
 const uri = process.env.URI_MONGODB;
 
 class MongoDB {
@@ -57,6 +57,32 @@ class MongoDB {
         {projection: {_id: 0, amount: 1}}
       ).toArray();
     });
+  }
+
+  filterByMounth(userId, typeTransaction, Mounth) {
+
+    const PipelineArr = [
+      {
+        '$match': {
+          'idOwner': new ObjectId(userId), 
+          'type': typeTransaction, 
+          'date': {
+            '$regex': `/${Mounth}/`
+          }
+        }
+      }, {
+        '$lookup': {
+          'from': 'category', 
+          'localField': 'category', 
+          'foreignField': '_id', 
+          'as': 'categoryInfo'
+        }
+      }
+    ];
+
+    return this.connect().then((db) => {
+      return db.collection('transactions').aggregate(PipelineArr).toArray();
+    })
   }
   /***************************CATEGORY COLLECTION METHODS***************************/
   insertCategory(data, userId) {
