@@ -66,7 +66,7 @@ class MongoDB {
         filterHistory.category
         ? {
           idOwner: ObjectId(filterHistory.userId),
-          category: filterHistory.category
+          category: ObjectId(filterHistory.category)
         }
         : {
           idOwner: ObjectId(filterHistory.userId)
