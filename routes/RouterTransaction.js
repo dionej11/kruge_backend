@@ -7,6 +7,7 @@ const client = new MongoDB();
 const passport = require('passport');
 const { ValidateBodyTransaction } = require('../middleware/types');
 
+const { changeBadge } = require('../utils/changeBadge');
 
 RouterTransaction.post('/new_transaction',
   ValidateBodyTransaction,
@@ -67,5 +68,44 @@ RouterTransaction.get('/history_transactions',
   let result = await client.historyTransactions({userId: request.user.sub, category: request.body.category});
   response.json({result, message: 'TOTAL MONEY'});
 });
+
+RouterTransaction.get('/transactions_filter/:type/:mounth',
+  passport.authenticate("jwt", {session: false}),
+  async (request, response) => {
+    let result = await client.filterByMounth(
+      request.user.sub,
+      request.params.type,
+      request.params.mounth
+    );
+
+    let finalResult = result.map(transaction => {
+      return {
+        ...transaction,
+        amount: transaction.badge === "COP" ? transaction.amount : changeBadge(transaction.amount, transaction.badge)
+      }
+    })
+
+    let CategoryList = await client.getAllCategories(request.user.sub);
+
+    const CategoryNames = CategoryList.map((category => {
+      return category.name
+    }))
+
+    const SumFinal = {};
+
+    CategoryNames.map((nameCategory) => {
+      SumFinal[nameCategory] = 0;
+    })
+
+    finalResult.map((transaction) => {
+      SumFinal[transaction.categoryInfo[0].name] += transaction.amount;
+    })
+
+    response.json({
+      SumFinal,
+      message: "FILTER TRANSACTIONS"
+    })
+  }
+)
 
 module.exports = RouterTransaction;
