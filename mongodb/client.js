@@ -54,8 +54,47 @@ class MongoDB {
   totalMoney(userId) {
     return this.connect().then((db) => {
       return db.collection('transactions').find({idOwner: ObjectId(userId), type: "ingreso"},
-        {projection: {_id: 0, amount: 1}}
+        {projection: {_id: 0, amount: 1, badge: 1}}
       ).toArray();
+    });
+  }
+
+  historyTransactions(filterHistory) {
+    const pipeline = [
+      {
+        '$match': 
+        filterHistory.category
+        ? {
+          idOwner: ObjectId(filterHistory.userId),
+          category: filterHistory.category
+        }
+        : {
+          idOwner: ObjectId(filterHistory.userId)
+        }
+      }, {
+        '$lookup': {
+          'from': "category",
+          'localField': "category",
+          'foreignField': "_id",
+          'as': 'categoryObject'
+        }
+      }, {
+        '$sort': {
+          _id: -1
+        }
+      }, {
+        '$limit': 3
+      },{
+        '$project': {
+          'type': 1, 
+          'amount': 1, 
+          'badge': 1, 
+          'categoryObject.icon': 1
+        }
+      }
+    ];
+    return this.connect().then((db) => {
+      return db.collection('transactions').aggregate(pipeline).toArray();
     });
   }
   /***************************CATEGORY COLLECTION METHODS***************************/

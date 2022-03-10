@@ -48,8 +48,23 @@ RouterTransaction.delete('/transactions/:transactionId',
 RouterTransaction.get('/total_money', 
   passport.authenticate("jwt", {session: false}),
   async (request, response) => {
+  let badge = {USD: 3700, MXN: 200, EUR: 4200}, totalMoney = 0;
   let result = await client.totalMoney(request.user.sub);
-  //aca se haria la parte de la conversión de las divisas que se tengan diferentes a la ya configurada
+  result.map(transaction => {
+    if(transaction.badge !== "COP") {
+      totalMoney += transaction.amount*badge[transaction.badge];  
+    }
+    else {
+      totalMoney += transaction.amount;
+    }
+  })
+  response.json({result: totalMoney, message: 'TOTAL MONEY'});
+});
+
+RouterTransaction.get('/history_transactions', 
+  passport.authenticate("jwt", {session: false}),
+  async (request, response) => {  
+  let result = await client.historyTransactions({userId: request.user.sub, category: request.body.category});
   response.json({result, message: 'TOTAL MONEY'});
 });
 
