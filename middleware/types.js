@@ -9,12 +9,12 @@ const ValidateBodyCategory = (request, response, next) => {
 }
 
 const ValidateBodyTransaction = (request, response, next) => {
-    if (request.body.type && request.body.amount && request.body.category && 
+    if (request.body.type && request.body.value && request.body.category && 
         request.body.date && request.body.details && request.body.badge) {
         next();
     } else {
         response.json({
-            error: "HACEN FALTAN CAMPOS"
+            error: "HACEN FALTA CAMPOS"
         })
     }
 }
