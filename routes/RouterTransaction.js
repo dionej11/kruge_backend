@@ -80,8 +80,7 @@ RouterTransaction.get('/transactions_filter/:type/:mounth',
 
     let finalResult = result.map(transaction => {
       return {
-        ...transaction,
-        amount: transaction.badge === "COP" ? transaction.amount : changeBadge(transaction.amount, transaction.badge)
+        ...transaction
       }
     })
 
