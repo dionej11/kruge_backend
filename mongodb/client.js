@@ -21,6 +21,20 @@ class MongoDB {
     return this.connection;
   }
   
+  /*************************** EXCHANGE ***************************/
+
+  GetCurrentBadgeValues() {
+    return this.connect().then((db) => {
+      return db.collection('exchange').findOne();
+    })
+  }
+
+  UpdateBadgeValues(id, newValues) {
+    return this.connect().then((db) => {
+      return db.collection('exchange').updateOne({_id: id}, {$set: {...newValues}});
+    })
+  }
+  
   /***************************TRANSACTION COLLECTION METHODS***************************/
   insertTransaction(data, userId) {
     return this.connect().then((db) => {

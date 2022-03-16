@@ -26,6 +26,7 @@
     "express": "4.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "4.4.0",
+    "node-fetch": "^2.6.7",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0"
   },
