@@ -68,7 +68,7 @@ class MongoDB {
   totalMoney(userId) {
     return this.connect().then((db) => {
       return db.collection('transactions').find({idOwner: ObjectId(userId), type: "ingreso"},
-        {projection: {_id: 0, amount: 1, badge: 1}}
+        {projection: {_id: 0, amount: 1}}
       ).toArray();
     });
   }

@@ -7,13 +7,21 @@ const client = new MongoDB();
 const passport = require('passport');
 const { ValidateBodyTransaction } = require('../middleware/types');
 
-const { changeBadge } = require('../utils/changeBadge');
+const { changeBadge, GetValueFromAPI } = require('../utils/changeBadge');
 
 RouterTransaction.post('/new_transaction',
   ValidateBodyTransaction,
   passport.authenticate("jwt", {session: false}),
   async (request, response) => {
-    let result = await client.insertTransaction(request.body, request.user.sub);
+    let amount = 0;
+    if (request.body.badge !== "COP") {
+      const valuesFromAPI = await GetValueFromAPI();
+      amount = parseInt(valuesFromAPI[request.body.badge]*request.body.value);
+    }else {
+      amount = request.body.value;
+    }
+    let result = await client.insertTransaction({...request.body, amount: amount}, request.user.sub);
+
     response.json({result, message: 'TRANSACTION INSERTED'});
 });
 
@@ -49,17 +57,10 @@ RouterTransaction.delete('/transactions/:transactionId',
 RouterTransaction.get('/total_money', 
   passport.authenticate("jwt", {session: false}),
   async (request, response) => {
-  let badge = {USD: 3700, MXN: 200, EUR: 4200}, totalMoney = 0;
   let result = await client.totalMoney(request.user.sub);
-  result.map(transaction => {
-    if(transaction.badge !== "COP") {
-      totalMoney += transaction.amount*badge[transaction.badge];  
-    }
-    else {
-      totalMoney += transaction.amount;
-    }
-  })
-  response.json({result: totalMoney, message: 'TOTAL MONEY'});
+  let total_money = 0;
+  result.map(tran => total_money += tran.amount);
+  response.json({result: total_money, message: 'TOTAL MONEY'});
 });
 
 RouterTransaction.get('/history_transactions', 
