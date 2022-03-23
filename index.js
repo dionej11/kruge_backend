@@ -24,6 +24,9 @@ servidor.use(require('./routes/RouterUsers'));
 servidor.use(require('./routes/RouterCategory'));
 servidor.use(require('./routes/RouterTransaction'));
 servidor.use(require('./routes/RouterGoogle'));
+servidor.use(require('./routes/RouterGitHub'));
+servidor.use(require('./routes/RouterDiscord'));
+servidor.use(require('./routes/RouterTwitch'));
 
 servidor.get('/', (request, response) =>{
   console.log('hola mundito desde nodemon');
