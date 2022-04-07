@@ -66,10 +66,23 @@ class MongoDB {
   }
 
   totalMoney(userId) {
+    const pipeline = 
+      [
+        {
+          '$match': {
+            idOwner: ObjectId(userId)
+          }
+        }, {
+          '$group': {
+            _id: '$type', 
+            count: {
+              '$sum': '$amount'
+            }
+          }
+        }
+      ];
     return this.connect().then((db) => {
-      return db.collection('transactions').find({idOwner: ObjectId(userId), type: "ingreso"},
-        {projection: {_id: 0, amount: 1}}
-      ).toArray();
+      return db.collection('transactions').aggregate(pipeline).toArray();
     });
   }
 
