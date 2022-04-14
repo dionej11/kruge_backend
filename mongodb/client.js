@@ -186,9 +186,9 @@ class MongoDB {
       return db.collection('users').insertOne(data);
     });
   }
-  getAllUsers() {
+  getUserById(userID) {
     return this.connect().then((db) => {
-      return db.collection('users').find().toArray();
+      return db.collection('users').findOne({_id: ObjectId(userID)});
     });
   }
   getUser(userEmail) {

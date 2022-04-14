@@ -5,15 +5,6 @@ const { GITHUB_STRATEGY } = require('./strategy/github.strategy');
 const { DISCORD_STRATEGY } = require('./strategy/discord.strategy');
 const { TWITCH_STRATEGY } = require('./strategy/twitch.strategy');
 
-// Manejo de sesión mediante Passport
-passport.serializeUser((user, done) => {
-  done(null, user)
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user)
-});
-
 passport.use(JWTSTRATEGY);
 
 passport.use("GOOGLE", PASSPORTGOOGLE);

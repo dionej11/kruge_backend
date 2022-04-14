@@ -24,8 +24,10 @@ RouterUsers.post('/new_user', async (request, response) => {
   response.json({ result, message: 'USER INSERTED' });
 });
 
-RouterUsers.get('/users', async (request, response) => {
-  let result = await client.getAllUsers();
+RouterUsers.get('/user',
+passport.authenticate("jwt", { session: false }),
+async (request, response) => {
+  let result = await client.getUserById(request.user.sub);
   response.json({ result, message: 'ALL USERS' });
 });
 

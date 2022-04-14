@@ -1,18 +1,13 @@
 const express = require('express');
 const passport = require('passport');
 const servidor = express();
-const cookieSession = require('cookie-session');
+const CORS = require('cors');
+
+servidor.use(CORS());
 
 require('dotenv').config();
 
-servidor.use(cookieSession({
-  name: "session",
-  keys: ["google", "github", "discord"],
-  maxAge: 24 * 60 * 60 * 1000
-}))
-
 servidor.use (passport.initialize());
-servidor.use(passport.session());
 
 require('./middleware');
 
