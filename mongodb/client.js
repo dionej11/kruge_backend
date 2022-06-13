@@ -79,6 +79,10 @@ class MongoDB {
               '$sum': '$amount'
             }
           }
+        }, {
+          '$sort': {
+            '_id': 1
+          }
         }
       ];
     return this.connect().then((db) => {

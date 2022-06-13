@@ -58,8 +58,11 @@ RouterTransaction.get('/total_money',
   passport.authenticate("jwt", {session: false}),
   async (request, response) => {
   let result = await client.totalMoney(request.user.sub);
-  let total_money = result[1].count - result[0].count;
-  response.json({result: {...result, total_money}, message: 'TOTAL MONEY'});
+  let total_money;
+  result.length > 0 
+  ? total_money = result[1].count - result[0].count
+  : total_money = 0;
+  response.json({result:  {...result, total_money}, message: 'TOTAL MONEY'});
 });
 
 RouterTransaction.get('/history_transactions', 
