@@ -15,18 +15,17 @@ RouterGitHub.get('/auth/github/callback',
   async function(request, response) {
     
     const User = request.user;
-    const UserExist = await client.getUser(User.email);
+    let UserExist = await client.getUser(User.email);
     
-    let token = FirmarToken(UserExist);
-
-    if (UserExist) {
-      response.cookie("JWT", token);
-      response.redirect(`${process.env.REDIRECT_URL}/home`);
-    }else {
-      response.cookie("JWT", token);
+    if (!UserExist) {
       await client.insertUser(request.user);
-      response.redirect(`${process.env.REDIRECT_URL}/home`);
+      UserExist = await client.getUser(User.email);
     }
+
+    let token = FirmarToken(UserExist);
+    
+    response.cookie("JWT", token);
+    response.redirect(`${process.env.REDIRECT_URL}/home`);
   }
 );
 
