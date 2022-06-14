@@ -118,7 +118,8 @@ class MongoDB {
       },{
         '$project': {
           'type': 1, 
-          'amount': 1, 
+          'value': 1,
+          'details': 1, 
           'badge': 1, 
           'categoryObject.icon': 1
         }
