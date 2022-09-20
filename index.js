@@ -38,4 +38,4 @@ servidor.get('/exchange', async (req, res) => {
   })
 })
 
-servidor.listen(3000, () => console.log(`server corriendo en ${3000}`));
+servidor.listen(process.env.PORT, () => console.log(`server corriendo en ${process.env.PORT}`));

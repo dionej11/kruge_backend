@@ -42,8 +42,37 @@ class MongoDB {
     });
   }
   getAllTransactions(userId) {
+    const pipeline = [
+      {
+        '$match': 
+        {
+          idOwner: ObjectId(userId)
+        }
+      }, {
+        '$lookup': {
+          'from': "category",
+          'localField': "category",
+          'foreignField': "_id",
+          'as': 'categoryObject'
+        }
+      }, {
+        '$sort': {
+          _id: -1
+        }
+      }, {
+        '$limit': 3
+      },{
+        '$project': {
+          'type': 1, 
+          'value': 1,
+          'details': 1, 
+          'badge': 1, 
+          'categoryObject.icon': 1
+        }
+      }
+    ];
     return this.connect().then((db) => {
-      return db.collection('transactions').find({idOwner: ObjectId(userId)}).toArray();
+      return db.collection('transactions').aggregate(pipeline).toArray();
     });
   }
   getTransaction(transactionId, userId) {
@@ -121,7 +150,8 @@ class MongoDB {
           'value': 1,
           'details': 1, 
           'badge': 1, 
-          'categoryObject.icon': 1
+          'categoryObject.icon': 1,
+          'categoryObject._id': 1
         }
       }
     ];

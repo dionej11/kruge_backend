@@ -1,13 +1,6 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const MongoDB = require('../mongodb/client');
 
-const Badge = {USD: 3700, MXN: 200, EUR: 4200};
-
-function changeBadge(value, originBadge) {
-    let valueCOP = value * Badge[originBadge];
-    return valueCOP;
-}
-
 const GetValueFromAPI = async () => {
  
     const client = new MongoDB();
@@ -46,4 +39,4 @@ const GetValueFromAPI = async () => {
     }
 }
 
-module.exports = { changeBadge, GetValueFromAPI };
+module.exports = { GetValueFromAPI };

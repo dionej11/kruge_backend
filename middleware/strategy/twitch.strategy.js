@@ -7,7 +7,7 @@ const { Strategy } = require('passport-twitch-new');
 const TWITCH_STRATEGY = new Strategy({
     clientID: process.env.TWITCH_CLIENT_ID,
     clientSecret: process.env.TWITCH_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/twitch/callback",
+    callbackURL: `${process.env.REDIRECT_OAUTH}/twitch/callback`,
     scope: "user_read"
 }, (accessToken, refreshToken, profile, done) => {
     

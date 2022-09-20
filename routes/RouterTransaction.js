@@ -7,7 +7,7 @@ const client = new MongoDB();
 const passport = require('passport');
 const { ValidateBodyTransaction } = require('../middleware/types');
 
-const { changeBadge, GetValueFromAPI } = require('../utils/changeBadge');
+const { GetValueFromAPI } = require('../utils/changeBadge');
 
 RouterTransaction.post('/new_transaction',
   ValidateBodyTransaction,
@@ -65,10 +65,10 @@ RouterTransaction.get('/total_money',
   response.json({result:  {...result, total_money}, message: 'TOTAL MONEY'});
 });
 
-RouterTransaction.get('/history_transactions', 
+RouterTransaction.get('/history_transactions/:categoryId', 
   passport.authenticate("jwt", {session: false}),
   async (request, response) => {  
-  let result = await client.historyTransactions({userId: request.user.sub, category: request.body.category});
+  let result = await client.historyTransactions({userId: request.user.sub, category: request.params.categoryId});
   response.json({result, message: 'TOTAL MONEY'});
 });
 

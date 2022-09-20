@@ -7,7 +7,7 @@ const { Strategy } = require('passport-github2');
 const GITHUB_STRATEGY = new Strategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/github/callback",
+    callbackURL: `${process.env.REDIRECT_OAUTH}/github/callback`,
     scope: ['user', 'user:email']
   },
   function(accessToken, refreshToken, profile, done) {

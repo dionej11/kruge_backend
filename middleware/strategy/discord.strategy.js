@@ -7,7 +7,7 @@ const { Strategy } = require('passport-discord');
 const DISCORD_STRATEGY = new Strategy({
     clientID: process.env.DISCORD_CLIENT_ID,
     clientSecret: process.env.DISCORD_CLIENT_SECRET,
-    callbackURL: `http://localhost:3000/auth/discord/callback`,
+    callbackURL: `${process.env.REDIRECT_OAUTH}/discord/callback`,
     scope: ['identify', 'email']
 }, (accessToken, refreshToken, profile, done) => {
     
