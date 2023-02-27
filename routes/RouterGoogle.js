@@ -28,8 +28,16 @@ RouterGoogle.get('/auth/google/callback',
 
     let token = FirmarToken(UserExist);
     
-    response.cookie("JWT", token);
-    response.redirect(`${process.env.REDIRECT_URL}/home`);
+    // response.cookie("JWT", token);
+    // response.redirect(`${process.env.REDIRECT_URL}/home`);
+    response.status(200).send(`<!DOCTYPE html>
+    <html lang="en">
+    <body>
+    </body>
+    <script>
+            window.opener.postMessage(${JSON.stringify(token)}, 'http://localhost:3001')
+        </script>
+    </html>`)
   }
 );
 
