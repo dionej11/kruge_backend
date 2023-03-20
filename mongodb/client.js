@@ -211,6 +211,9 @@ class MongoDB {
   }
   deleteCategory(categoryId, userId) {
     return this.connect().then((db) => {
+
+      db.collection('transactions').deleteMany({category: ObjectId(categoryId), idOwner:  ObjectId(userId)})
+
       return db.collection('category').deleteOne({_id: ObjectId(categoryId), idOwner:  ObjectId(userId)});
     });
   }
