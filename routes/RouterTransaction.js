@@ -59,10 +59,24 @@ RouterTransaction.get('/total_money',
   async (request, response) => {
   let result = await client.totalMoney(request.user.sub);
   let total_money;
-  result.length > 0 
-  ? total_money = result[1].count - result[0].count
-  : total_money = 0;
-  response.json({result:  {...result, total_money}, message: 'TOTAL MONEY'});
+  console.log(result);
+  if (result.length) {
+    if (result.length == 2) {
+      total_money = result[1].count - result[0].count;
+      response.json({result:  {...result, total_money}, message: 'TOTAL MONEY'});
+    } else {
+      total_money = result[0].count;
+      if (result[0]._id === 'gasto') {
+        response.json({result:  {"0": result[0], "1": 0, total_money}, message: 'TOTAL MONEY'});
+      } else {
+        response.json({result:  {"0": 0, "1": result[0], total_money}, message: 'TOTAL MONEY'});
+      }
+    }
+  } else {
+    response.json({result:  {"0": 0, "1": 0, total_money: 0}, message: 'ERROR O NO ENCONTRADO'});
+  }
+   
+  
 });
 
 RouterTransaction.get('/history_transactions/:categoryId', 
